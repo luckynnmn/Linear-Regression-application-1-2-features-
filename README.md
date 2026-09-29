@@ -23,7 +23,7 @@ Adding `age` raises R² by about **0.078**, and Gradient Descent converges to th
 | **1 feature** (BMI): Gradient Descent | [`03_gradient_descent.py`](03_gradient_descent.py) |
 | **1 feature** (BMI): model comparison with visual | [`04_compare_models_visual.py`](04_compare_models_visual.py) |
 | **2 features** (BMI + age): Normal Equation and Gradient Descent, compared with the 1-feature baseline | [`TwoFeatureLinearRegression.py`](TwoFeatureLinearRegression.py) |
-| Jupyter notebook lab | [`linear_regression_lab.ipynb`](linear_regression_lab.ipynb) |
+| Jupyter notebook 1 feature lab | [`linear_regression_lab.ipynb`](linear_regression_lab.ipynb) |
 | Comparison results (written by the 2-feature script) | [`reports/assignment_results.csv`](reports/assignment_results.csv) |
 | Dataset | [`data/insurance-premium-prediction/insurance.csv`](data/insurance-premium-prediction/insurance.csv) |
 
