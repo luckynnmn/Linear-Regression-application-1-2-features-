@@ -1,170 +1,131 @@
-# Linear Regression Learning Lab
+# Linear Regression Application (1 Feature and 2 Features)
 
-A beginner-friendly project for learning linear regression from first principles using real insurance data.
+Predicting medical insurance `expenses` from customer data using linear regression, built from scratch in pure Python (no numpy).
 
-Students will learn two ways to train the same type of model:
-- Normal Equation (analytical solution)
-- Gradient Descent (iterative optimization)
+The project starts with a **1-feature model** (`bmi -> expenses`) and extends it to a **2-feature model** (`bmi + age -> expenses`), because BMI alone explains very little of the variation in expenses (R² ≈ 0.04).
 
-The project includes Python scripts and a Jupyter notebook so you can learn either in code-first or notebook-first style.
+## Results
 
-## What You Are Downloading
+| Model | Equation | RMSE | MAE | R² |
+|---|---|---|---|---|
+| 1 feature (BMI only, Normal Equation) | `expenses = 1178.1795 + 394.3276*bmi` | 11,864.41 | 9,172.30 | 0.0394 |
+| 2 features (BMI + age, Normal Equation) | `expenses = -6437.3475 + 333.3909*bmi + 241.9001*age` | 11,373.64 | 9,032.28 | 0.1173 |
+| 2 features (BMI + age, Gradient Descent) | same coefficients as Normal Equation | 11,373.64 | 9,032.28 | 0.1173 |
 
-This repository contains:
-- Educational Python scripts that build from data exploration to model comparison
-- A Jupyter notebook version of the lesson with visual outputs and interpretations
-- A local copy of the insurance dataset used in all examples
-- A saved model-comparison chart
+Adding `age` raises R² by about **0.078**, and Gradient Descent converges to the same coefficients as the Normal Equation. R² is still low, so most of the variation in expenses is driven by variables not included in this model, which is a natural next step.
 
-## Learning Objectives
+## Where to find each model
 
-By the end of this lab, students should be able to:
-1. Load and inspect a real dataset.
-2. Explain the difference between features and target.
-3. Train a single-feature linear regression model with the Normal Equation.
-4. Train the same model with Gradient Descent.
-5. Understand why feature standardization helps Gradient Descent.
-6. Evaluate model quality using MSE, RMSE, MAE, and R2.
-7. Compare train vs test performance and discuss generalization.
-8. Translate technical results into plain-language stakeholder takeaways.
+| What | File |
+|---|---|
+| **1 feature** (BMI): simple linear regression | [`01_simple_linear.py`](01_simple_linear.py) |
+| **1 feature** (BMI): Normal Equation (OLS) | [`02_ols_normal_equation.py`](02_ols_normal_equation.py) |
+| **1 feature** (BMI): Gradient Descent | [`03_gradient_descent.py`](03_gradient_descent.py) |
+| **1 feature** (BMI): model comparison with visual | [`04_compare_models_visual.py`](04_compare_models_visual.py) |
+| **2 features** (BMI + age): Normal Equation and Gradient Descent, compared with the 1-feature baseline | [`TwoFeatureLinearRegression.py`](TwoFeatureLinearRegression.py) |
+| Jupyter notebook lab | [`linear_regression_lab.ipynb`](linear_regression_lab.ipynb) |
+| Comparison results (written by the 2-feature script) | [`reports/assignment_results.csv`](reports/assignment_results.csv) |
+| Dataset | [`data/insurance-premium-prediction/insurance.csv`](data/insurance-premium-prediction/insurance.csv) |
 
-## Repository Structure
+## Repository structure
 
-- 01_simple_linear.py
-- 02_ols_normal_equation.py
-- 03_gradient_descent.py
-- 04_compare_models_visual.py
-- linear_regression_lab.ipynb
-- requirements.txt
-- data/insurance-premium-prediction/insurance.csv
-- data/model_comparison_bmi_expenses.png
+```
+.
+├── 01_simple_linear.py
+├── 02_ols_normal_equation.py
+├── 03_gradient_descent.py
+├── 04_compare_models_visual.py
+├── TwoFeatureLinearRegression.py
+├── linear_regression_lab.ipynb
+├── requirements.txt
+├── data/
+│   ├── insurance-premium-prediction/
+│   │   └── insurance.csv
+│   └── model_comparison_bmi_expenses.png
+└── reports/
+    └── assignment_results.csv
+```
 
-## Prerequisites
+## How the 2-feature model works
 
-- Python 3.10 or newer recommended
-- Git
-- Internet access (only needed for initial clone and optional package installs)
+`TwoFeatureLinearRegression.py` trains `expenses = w0 + w1*bmi + w2*age` two ways:
 
-## 1) Clone the Project
+1. **Normal Equation** with a general linear solver (Gauss-Jordan elimination), not the 2x2 shortcut used in the 1-feature script.
+2. **Gradient Descent** on standardized features (learning rate 0.05, 10,000 epochs), then converts the weights back to the original units.
 
-Run in a terminal:
+It compares both against the BMI-only baseline, prints a comparison table (MSE, RMSE, MAE, R²), and writes `reports/assignment_results.csv`.
+
+## Getting started
+
+### Requirements
+
+- [Git](https://git-scm.com/downloads)
+- Python 3.8 or newer
+
+### 1. Clone the repository
+
+The command is the same on Windows and macOS:
 
 ```bash
-git clone https://github.com/shylasolis/linear-regression-with-standardization.git
-cd linear-regression-with-standardization
+git clone https://github.com/luckynnmn/Linear-Regression-application-1-2-features-.git
+cd Linear-Regression-application-1-2-features-
 ```
 
-## 2) Create and Activate a Virtual Environment
+No Git? On the GitHub page click **Code > Download ZIP**, unzip, and open the folder in a terminal.
 
-### Windows (PowerShell)
+### 2. Create a virtual environment and install packages
+
+**Windows (PowerShell):**
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+python -m venv LinearRegression
+.\LinearRegression\Scripts\Activate.ps1
+pip install -r requirements.txt
 ```
 
-If script execution is blocked:
+If PowerShell blocks the activate script, run this once in the same window and try again:
 
 ```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\.venv\Scripts\Activate.ps1
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
 ```
 
-### macOS (Terminal or zsh)
+**macOS (Terminal):**
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
+python3 -m venv LinearRegression
+source LinearRegression/bin/activate
+pip install -r requirements.txt
 ```
 
-## 3) Install Dependencies
+### 3. Run the models
 
-### Windows
-
-```powershell
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-```
-
-### macOS
+**1 feature (BMI):**
 
 ```bash
-python3 -m pip install --upgrade pip
-python3 -m pip install -r requirements.txt
-```
-
-## 4) Run the Scripts in Order
-
-### Windows
-
-```powershell
 python 01_simple_linear.py
 python 02_ols_normal_equation.py
 python 03_gradient_descent.py
 python 04_compare_models_visual.py
 ```
 
-### macOS
+**2 features (BMI + age):**
 
 ```bash
-python3 01_simple_linear.py
-python3 02_ols_normal_equation.py
-python3 03_gradient_descent.py
-python3 04_compare_models_visual.py
+python TwoFeatureLinearRegression.py
 ```
 
-Why this order:
-1. Explore and understand the data
-2. Learn analytical OLS
-3. Learn iterative OLS with Gradient Descent
-4. Compare both methods and review business interpretation
+On macOS use `python3` instead of `python` if `python` is not found (inside the activated virtual environment, `python` also works).
 
-## 5) Run the Jupyter Notebook
+`TwoFeatureLinearRegression.py` uses only the Python standard library, so it runs even without installing `requirements.txt`. The packages are needed for the plotting script and the notebook.
 
-Start Jupyter:
-
-### Windows
-
-```powershell
-python -m notebook
-```
-
-### macOS
+### 4. Open the notebook (optional)
 
 ```bash
-python3 -m notebook
+jupyter notebook linear_regression_lab.ipynb
 ```
 
-Then open:
-- linear_regression_lab.ipynb
+If Jupyter is not installed: `pip install notebook`.
 
-Run cells from top to bottom.
+## Contact
 
-## Key Concepts Students Should Notice
-
-- The Normal Equation and Gradient Descent should converge to very similar model parameters for this problem.
-- Standardizing BMI improves optimization stability for Gradient Descent.
-- A single-feature model has limited predictive power, which is expected and educational.
-- Metrics are only useful when interpreted in context of business goals and baseline performance.
-
-## Troubleshooting
-
-- ModuleNotFoundError:
-  - Make sure your virtual environment is activated.
-  - Re-run package installation from requirements.txt.
-- Wrong Python interpreter in VS Code:
-  - Use Command Palette -> Python: Select Interpreter -> choose .venv.
-- Notebook import issues:
-  - Ensure the notebook kernel is set to the same .venv environment.
-
-## Suggested Class Activity
-
-1. Try several learning rates and compare convergence curves.
-2. Add more features and discuss changes in R2 and RMSE.
-3. Create a validation split and tune hyperparameters.
-4. Present results to a non-technical audience in plain language.
-
-## License and Data
-
-- Educational use repository.
-- Dataset source: Kaggle insurance premium prediction dataset.
+Nhi (Lucky) Nguyen — [@luckynnmn](https://github.com/luckynnmn)
